@@ -32,16 +32,22 @@ var listener = app.listen(process.env.PORT, function () {
 // listen for Botmatic events
 botmatic.onEvent(botmatic.events.USER_REPLY, function(event) {
   return new Promise((resolve, reject) => {
-    console.log(event.data.result);
+    console.log(event.data);
     
-     match(event.data., [
+     match(event.data, [
        
-        [{intents: $, platform: $}, (intents, platform) => {
-         console.log(intents)
+        [{result: {intents: $, source: $}, platform: $, contact_id: $, bot_id: $}, (intents, source, platform, userId, botId) => {
+           console.log("1111111")
+          var msg = userMessage(userId, platform, source, intents[0])
+          sendToChatbase(msg)
+          
         }],
        
-       [{intents: $, platform: $}, (intents, platform) => {
-         console.log(intents)
+       [{result: {source: $}, platform: $, contact_id: $, bot_id: $}, (source, platform, userId, botId) => {
+         console.log("2222222")
+         var msg = userMessage(userId, platform, source, "", true)   
+         sendToChatbase(msg)
+         
         }],
        
         [_, () => {console.log('pattern match failed')}]
@@ -60,13 +66,15 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
 
 
 // Chatbase helpers
-var userMessage = (userId, platform, message, intent, notHandled, feedback) => {
+var userMessage = (userId, platform, message = "", intent = "", notHandled = false, feedback = false) => {
   var msg = chatbase.newMessage(process.env.CHATBASE_KEY, userId)
     .setAsTypeUser() // sets the message as type user
     .setTimestamp(Date.now().toString()) // Only unix epochs with Millisecond precision
     .setPlatform(platform)
     .setMessage(message) // the message sent by either user or agent
     .setIntent(intent) // the intent of the sent message (does not have to be set for agent messages)
+    .setAsHandled()
+    .setAsNotF
   
   if(notHandled){
     msg.setAsNotHandled()
@@ -75,10 +83,14 @@ var userMessage = (userId, platform, message, intent, notHandled, feedback) => {
   if(feedback){
     msg.setAsFeedback()
   }
+  
+  return msg
 
 }
 
 var sendToChatbase = (msg) => {
+  console.log("sending to chatbase")
+  
   msg
     .send()
     .then(msg => console.log(msg.getCreateResponse()))
