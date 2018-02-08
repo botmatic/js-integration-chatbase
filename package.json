@@ -15,7 +15,8 @@
     "@botmatic/js-integration": "^0.3.5",
     "@google/chatbase": "^1.0.0",
     "@google-cloud/datastore": "^1.3.3",
-    "z": "^1.0.4"
+    "z": "^1.0.4",
+    "kasai": "^1.1.1"
   },
   "engines": {
     "node": "8.x"
