@@ -32,9 +32,14 @@ botmatic.onEvent(botmatic.events.USER_REPLY, function(data) {
     console.log(data);
     matches(data.result)(
       
-      (x = {intents: Array}) => { 
+      (x = {intents: intents}) => { 
         console.log("pattern match") 
-        console.log(x)
+        console.log(x.intents)
+      },
+      
+      (x = {intents: []}) => { 
+        console.log("pattern match array") 
+        console.log(x.intents)
       },
       
       (x) => console.log('unhandled intent')
