@@ -4,7 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
-const botmatic = require('@botmatic/js-integration')({'server': app, 'path': 'botmatic'})
+const botmatic = require('@botmatic/js-integration')({'server': app, 'path': '/botmatic', 'token': 'test'})
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -27,13 +27,14 @@ var listener = app.listen(process.env.PORT, function () {
 // listen for Botmatic events
 botmatic.onEvent(botmatic.events.USER_REPLY, function(data) {
   return new Promise((resolve, reject) => {
-    
+    console.log(data);
     resolve({data: "ok", type: "data"});
   })
 })
 
 botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
   return new Promise((resolve, reject) => {
+    console.log(data);
     resolve({data: "ok", type: "data"});
   })
 })
