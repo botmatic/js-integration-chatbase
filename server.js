@@ -34,9 +34,14 @@ botmatic.onEvent(botmatic.events.USER_REPLY, function(event) {
   return new Promise((resolve, reject) => {
     console.log(event.data.result);
     
-     match(event.data.result, [
-        
-       [{intents: $}, (intents) => {
+     match(event.data., [
+       
+        [{intents: $, platform: $}, (intents, platform) => {
+         console.log(intents)
+        }],
+       
+       [{intents: $, platform: $}, (intents, platform) => {
+         console.log(intents)
         }],
        
         [_, () => {console.log('pattern match failed')}]
@@ -55,7 +60,7 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
 
 
 // Chatbase helpers
-var userMessage = (userId, platform, message, intent, not_handled, feedback) => {
+var userMessage = (userId, platform, message, intent, notHandled, feedback) => {
   var msg = chatbase.newMessage(process.env.CHATBASE_KEY, userId)
     .setAsTypeUser() // sets the message as type user
     .setTimestamp(Date.now().toString()) // Only unix epochs with Millisecond precision
@@ -63,7 +68,7 @@ var userMessage = (userId, platform, message, intent, not_handled, feedback) => 
     .setMessage(message) // the message sent by either user or agent
     .setIntent(intent) // the intent of the sent message (does not have to be set for agent messages)
   
-  if(not_handled){
+  if(notHandled){
     msg.setAsNotHandled()
   }
   
@@ -71,4 +76,11 @@ var userMessage = (userId, platform, message, intent, not_handled, feedback) => 
     msg.setAsFeedback()
   }
 
+}
+
+var sendToChatbase = (msg) => {
+  msg
+    .send()
+    .then(msg => console.log(msg.getCreateResponse()))
+    .catch(err => console.error(err));
 }
