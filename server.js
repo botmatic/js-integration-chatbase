@@ -4,7 +4,8 @@
 // init project
 var express = require('express');
 var app = express();
-const botmatic = require('@botmatic/js-integration')({'server': app})
+const botmatic = require('@botmatic/js-integration')({'server': app, 'path': 'botmatic'})
+
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
@@ -16,24 +17,23 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/dreams", function (request, response) {
-  response.send(dreams);
-});
-
-// could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
-app.post("/dreams", function (request, response) {
-  dreams.push(request.query.dream);
-  response.sendStatus(200);
-});
-
-// Simple in-memory store for now
-var dreams = [
-  "Find and count some sheep",
-  "Climb a really tall mountain",
-  "Wash the dishes"
-];
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
+
+// listen for Botmatic events
+botmatic.onEvent(botmatic.events.USER_REPLY, function(data) {
+  return new Promise((resolve, reject) => {
+    
+    resolve({data: "ok", type: "data"});
+  })
+})
+
+botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
+  return new Promise((resolve, reject) => {
+    resolve({data: "ok", type: "data"});
+  })
+})
