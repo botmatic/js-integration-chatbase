@@ -4,6 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
+var chatbase = require('@google/chatbase');
 
 const { matches } = require('z')
 const {match, _, typeOf, instanceOf, $, when} = require('kasai')
@@ -29,12 +30,15 @@ var listener = app.listen(process.env.PORT, function () {
 });
 
 // listen for Botmatic events
-botmatic.onEvent(botmatic.events.USER_REPLY, function(data) {
+botmatic.onEvent(botmatic.events.USER_REPLY, function(event) {
   return new Promise((resolve, reject) => {
-    console.log(data.data);
+    console.log(event.data.result);
     
-     match(data.data, [
-        [{intents: $}, (intents) => {console.log(intents)}],
+     match(event.data.result, [
+        
+       [{intents: $}, (intents) => {
+        }],
+       
         [_, () => {console.log('pattern match failed')}]
     ]);
     
@@ -48,3 +52,23 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
     resolve({data: "ok", type: "data"});
   })
 })
+
+
+// Chatbase helpers
+var userMessage = (userId, platform, message, intent, not_handled, feedback) => {
+  var msg = chatbase.newMessage(process.env.CHATBASE_KEY, userId)
+    .setAsTypeUser() // sets the message as type user
+    .setTimestamp(Date.now().toString()) // Only unix epochs with Millisecond precision
+    .setPlatform(platform)
+    .setMessage(message) // the message sent by either user or agent
+    .setIntent(intent) // the intent of the sent message (does not have to be set for agent messages)
+  
+  if(not_handled){
+    msg.setAsNotHandled()
+  }
+  
+  if(feedback){
+    msg.setAsFeedback()
+  }
+
+}
