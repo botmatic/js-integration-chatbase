@@ -30,12 +30,11 @@ var listener = app.listen(process.env.PORT, function () {
 // listen for Botmatic events
 botmatic.onEvent(botmatic.events.USER_REPLY, function(data) {
   return new Promise((resolve, reject) => {
-    console.log(data);
+    console.log(data.results);
     
      match(data.results, [
-        [{intent: $, middle: $, last: $}, (f, m, l) => f + ' ' + m + ' ' + l],
-        [{first: $, last: $}           , (f, l) => f + ' ' + l],
-        [_, 'unknown']
+        [{intent: $}, (intents) => {console.log(intents)}],
+        [{}, () => {console.log('pattern match failed')}]
     ]);
     
     resolve({data: "ok", type: "data"});
