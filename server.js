@@ -4,7 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
-
+const botmatic = require('@botmatic/js-integration')({'server': app})
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
