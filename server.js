@@ -38,7 +38,7 @@ botmatic.onEvent(botmatic.events.USER_REPLY, function(event) {
        
         [{result: {intents: $, source: $}, platform: $, contact_id: $, bot_id: $}, (intents, source, platform, userId, botId) => {
            console.log("1111111")
-          var msg = userMessage(userId, platform, source, intents[0])
+          var msg = userMessage(userId, platform, source, intents[0].slug)
           sendToChatbase(msg)
           
         }],
@@ -67,14 +67,14 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
 
 // Chatbase helpers
 var userMessage = (userId, platform, message = "", intent = "", notHandled = false, feedback = false) => {
-  var msg = chatbase.newMessage(process.env.CHATBASE_KEY, userId)
+  var msg = chatbase.newMessage(process.env.CHATBASE_KEY, userId.toString())
     .setAsTypeUser() // sets the message as type user
     .setTimestamp(Date.now().toString()) // Only unix epochs with Millisecond precision
     .setPlatform(platform)
     .setMessage(message) // the message sent by either user or agent
     .setIntent(intent) // the intent of the sent message (does not have to be set for agent messages)
     .setAsHandled()
-    .setAsNotF
+    .setAsNotFeedback()
   
   if(notHandled){
     msg.setAsNotHandled()
@@ -84,6 +84,7 @@ var userMessage = (userId, platform, message = "", intent = "", notHandled = fal
     msg.setAsFeedback()
   }
   
+  console.log(msg)
   return msg
 
 }
@@ -93,6 +94,6 @@ var sendToChatbase = (msg) => {
   
   msg
     .send()
-    .then(msg => console.log(msg.getCreateResponse()))
+    .then(msg => resolve(msg.getCreateResponse())))
     .catch(err => console.error(err));
 }
