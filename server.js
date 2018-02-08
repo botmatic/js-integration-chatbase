@@ -5,6 +5,7 @@
 var express = require('express');
 var app = express();
 
+const { matches } = require('z')
 const botmatic = require('@botmatic/js-integration')({'server': app, 'path': '/botmatic', 'token': 'test'})
 
 // we've started you off with Express, 
@@ -29,6 +30,15 @@ var listener = app.listen(process.env.PORT, function () {
 botmatic.onEvent(botmatic.events.USER_REPLY, function(data) {
   return new Promise((resolve, reject) => {
     console.log(data);
+    matches(data.result)(
+      
+      (x = {intents: Array}) => { 
+        console.log("pattern match") 
+        console.log(x)
+      },
+      
+      (x) => console.log('unhandled intent')
+    )
     resolve({data: "ok", type: "data"});
   })
 })
