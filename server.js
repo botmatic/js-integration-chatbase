@@ -4,6 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
+
 const botmatic = require('@botmatic/js-integration')({'server': app, 'path': '/botmatic', 'token': 'test'})
 
 // we've started you off with Express, 
@@ -18,11 +19,11 @@ app.get("/", function (request, response) {
 });
 
 
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
-
 
 // listen for Botmatic events
 botmatic.onEvent(botmatic.events.USER_REPLY, function(data) {
