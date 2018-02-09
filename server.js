@@ -11,7 +11,7 @@ const {match, _, typeOf, instanceOf, $, when} = require('kasai')
 const botmatic = require('@botmatic/js-integration')({'server': app, 'path': '/botmatic', 'token': 'test'})
 const datastore = new Datastore({
   projectId: process.env.GOOGLE_PROJECT_ID,
-  namespaceId: process.env.GOOGLE_DATASTORE_NS
+  namespace: process.env.GOOGLE_DATASTORE_NS
 });
 
 // we've started you off with Express, 
@@ -76,10 +76,8 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
 // Google Datastore
 var getChatbaseKey = (datastore) => {
   const query = datastore.createQuery('Chatbase')
-  
-  //const query = datastore.createQuery('test')
-    //.filter('chatbase_key', '=', process.env.CHATBASE_KEY)
-
+    .filter('chatbase_key', '=', process.env.CHATBASE_KEY)
+ 
   datastore
     .runQuery(query)
     .then(results => {
