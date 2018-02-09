@@ -32,26 +32,32 @@ var listener = app.listen(process.env.PORT, function () {
 
 // listen for Botmatic events
 botmatic.onEvent(botmatic.events.USER_REPLY, function(event) {
+  getChatbaseKey(datastore)
+  
   return new Promise((resolve, reject) => {
     console.log(event.data);
     
      match(event.data, [
        
         [{result: {intents: $, source: $}, platform: $, contact_id: $, bot_id: $}, (intents, source, platform, userId, botId) => {
-          var msg = userMessage(userId, platform, source, intents[0].slug)
+          
+          var msg = userMessage(process.env.CHATBASE_KEY, userId, platform, source, intents[0].slug)
           sendToChatbase(msg, resolve, reject)
           
         }],
        
        [{result: {source: $}, platform: $, contact_id: $, bot_id: $}, (source, platform, userId, botId) => {
-         var msg = userMessage(userId, platform, source, "", true)   
+         
+         var msg = userMessage(process.env.CHATBASE_KEY, userId, platform, source, "", true)   
          sendToChatbase(msg, resolve, reject)
          
         }],
        
         [_, () => {
+          
           console.log('pattern match failed')
           reject({success: false, data: 'pattern match failed'})
+          
         }]
     ]);
     
@@ -67,19 +73,19 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
 })
 
 // Google Datastore
-var getChatbaseKey = () => {
-  const query = datastore.createQuery('Chatbase');
+var getChatbaseKey = (datastore) => {
+  const query = datastore.createQuery('Chatbase')
+    .filter('chatbase_key', '=', process.env.CHATBASE_KEY)
 
   datastore
     .runQuery(query)
     .then(results => {
-      const tasks = results[0];
-
-      console.log('Tasks:');
-      tasks.forEach(task => {
+      console.log('Chatbase key:');
+      console.log(results);
+      /*tasks.forEach(task => {
         const taskKey = task[datastore.KEY];
         console.log(taskKey.id, task);
-      });
+      });*/
     })
     .catch(err => {
       console.error('ERROR:', err);
@@ -89,8 +95,8 @@ var getChatbaseKey = () => {
 
 
 // Chatbase helpers
-var userMessage = (userId, platform, message = "", intent = "", notHandled = false, feedback = false) => {
-  var msg = chatbase.newMessage(process.env.CHATBASE_KEY, userId.toString())
+var userMessage = (chatbaseKey, userId, platform, message = "", intent = "", notHandled = false, feedback = false) => {
+  var msg = chatbase.newMessage(chatbaseKey, userId.toString())
     .setAsTypeUser() // sets the message as type user
     .setTimestamp(Date.now().toString()) // Only unix epochs with Millisecond precision
     .setPlatform(platform)
