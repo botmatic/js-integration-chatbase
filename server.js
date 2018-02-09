@@ -77,13 +77,14 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
 var getChatbaseKey = (datastore) => {
   const query = datastore.createQuery('Chatbase')
     .filter('workspace', '=', 'hrconverse')
+    .limit(1)
     //.filter('chatbase_key', '=', process.env.CHATBASE_KEY)
  
   datastore
     .runQuery(query)
     .then(results => {
       console.log('Chatbase key:');
-    console.log(results)
+      console.log(results)
       console.log(results[0][0].chatbase_key);
       /*tasks.forEach(task => {
         const taskKey = task[datastore.KEY];
