@@ -37,20 +37,21 @@ botmatic.onEvent(botmatic.events.USER_REPLY, function(event) {
      match(event.data, [
        
         [{result: {intents: $, source: $}, platform: $, contact_id: $, bot_id: $}, (intents, source, platform, userId, botId) => {
-           console.log("1111111")
           var msg = userMessage(userId, platform, source, intents[0].slug)
-          sendToChatbase(msg)
+          sendToChatbase(msg, resolve, reject)
           
         }],
        
        [{result: {source: $}, platform: $, contact_id: $, bot_id: $}, (source, platform, userId, botId) => {
-         console.log("2222222")
          var msg = userMessage(userId, platform, source, "", true)   
-         sendToChatbase(msg)
+         sendToChatbase(msg, resolve, reject)
          
         }],
        
-        [_, () => {console.log('pattern match failed')}]
+        [_, () => {
+          console.log('pattern match failed')
+          reject({success: false, data: 'pattern match failed'})
+        }]
     ]);
     
     resolve({data: "ok", type: "data"});
@@ -89,11 +90,11 @@ var userMessage = (userId, platform, message = "", intent = "", notHandled = fal
 
 }
 
-var sendToChatbase = (msg) => {
+var sendToChatbase = (msg, resolve, reject) => {
   console.log("sending to chatbase")
   
   msg
     .send()
-    .then(msg => resolve(msg.getCreateResponse())))
-    .catch(err => console.error(err));
+    .then(msg => resolve({success: true, data: msg.getCreateResponse(), type: 'data'}))
+    .catch(err => reject({success: false, data: err, type: 'data'}));
 }
