@@ -6,13 +6,21 @@ var express = require('express');
 var app = express();
 var chatbase = require('@google/chatbase');
 
+const tmpFile = require('tmp-file');
 const Datastore = require('@google-cloud/datastore');
-const {match, _, typeOf, instanceOf, $, when} = require('kasai')
-const botmatic = require('@botmatic/js-integration')({'server': app, 'path': '/botmatic', 'token': 'test'})
+const {match, _, typeOf, instanceOf, $, when} = require('kasai');
+
+const botmatic = require('@botmatic/js-integration')({'server': app, 'path': '/botmatic', 'token': 'test'});
+
+const googleKeyFile = tmpFile.generateFile(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
 const datastore = new Datastore({
   projectId: process.env.GOOGLE_PROJECT_ID,
-  namespace: process.env.GOOGLE_DATASTORE_NS
+  namespace: process.env.GOOGLE_DATASTORE_NS,
+  keyFilename: googleKeyFile.path
 });
+
+console.log(datastore);
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
