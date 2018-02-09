@@ -76,6 +76,7 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
 // Google Datastore
 var getChatbaseKey = (datastore) => {
   const query = datastore.createQuery('Chatbase')
+    //.filter('workspace', '=', 'hrconverse')
     .filter('chatbase_key', '=', process.env.CHATBASE_KEY)
  
   datastore
