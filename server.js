@@ -25,8 +25,7 @@ app.get("/", function (request, response) {
 });
 
 
-
-// listen for requests :)
+// listen for requests
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
@@ -66,6 +65,27 @@ botmatic.onEvent(botmatic.events.BOT_REPLY, function(data) {
     resolve({data: "ok", type: "data"});
   })
 })
+
+// Google Datastore
+var getChatbaseKey = () => {
+  const query = datastore.createQuery('Chatbase');
+
+  datastore
+    .runQuery(query)
+    .then(results => {
+      const tasks = results[0];
+
+      console.log('Tasks:');
+      tasks.forEach(task => {
+        const taskKey = task[datastore.KEY];
+        console.log(taskKey.id, task);
+      });
+    })
+    .catch(err => {
+      console.error('ERROR:', err);
+    });
+}
+
 
 
 // Chatbase helpers
