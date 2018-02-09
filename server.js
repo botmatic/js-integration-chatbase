@@ -6,24 +6,22 @@ var express = require('express');
 var app = express();
 var chatbase = require('@google/chatbase');
 
+const fs = require('fs');
 const tmpFile = require('tmp-file');
 const Datastore = require('@google-cloud/datastore');
 const {match, _, typeOf, instanceOf, $, when} = require('kasai');
 
 const botmatic = require('@botmatic/js-integration')({'server': app, 'path': '/botmatic', 'token': 'test'});
 
-const googleKeyFile = tmpFile.generateFile(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const googleKeyFile = '/tmp/google-account.json';
+// synchronous write - only when starting the app so that's okay.
+fs.writeFileSync('/tmp/google-account.json', process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 const datastore = new Datastore({
   projectId: process.env.GOOGLE_PROJECT_ID,
   namespace: process.env.GOOGLE_DATASTORE_NS,
-  keyFilename: googleKeyFile.path
+  keyFilename: googleKeyFile
 });
-
-console.log(datastore);
-
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -32,7 +30,6 @@ app.use(express.static('public'));
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
-
 
 // listen for requests
 var listener = app.listen(process.env.PORT, function () {
