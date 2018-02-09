@@ -1,27 +1,29 @@
-Welcome to the Glitch BETA
+Chatbase Integration for Botmatic
 =========================
 
-Click `Show` in the header to see your app live. Updates to your code will instantly deploy and update live.
+- Botmatic - learn more at [Botmatic.ai](https://botmatic.ai)
 
-**Glitch** is the friendly community where you'll build the app of your dreams. Glitch lets you instantly create, remix, edit, and host an app, bot or site, and you can invite collaborators or helpers to simultaneously edit code with you.
+- Chatbase - learn more at [Chatbase](https://chatbase.com)
 
-Find out more [about Glitch](https://glitch.com/about).
+ 
+## Setup instructions
+---
+### Google Cloud Datastore
+
+- store your json credentials in .data/google-account.json
+- add your Google project id and Datastore namespace to `.env`
+
+### Secure your endpoint
+
+- add your Botmatic workspace token to `.env`
+
+**This will ensure that all requests are coming from Botmatic.ai servers**
 
 
-Your Project
-------------
-
-On the front-end,
-- edit `public/client.js`, `public/style.css` and `views/index.html`
-- drag in `assets`, like images or music, to add them to your project
-
-On the back-end,
-- your app starts at `server.js`
-- add frameworks and packages in `package.json`
-- safely store app secrets in `.env` (nobody can see this but you and people you invite)
+## About Botmatic
+---
+[Botmatic.ai](https://botmatic.ai) is a keyboard first experience where you design your chatbot by writing a conversation. You can create your own integrations and listen to Botmatic events and actions.
 
 
-Made by [Fog Creek](https://fogcreek.com/)
--------------------
 
 \ ゜o゜)ノ
