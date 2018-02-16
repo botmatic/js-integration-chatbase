@@ -4,7 +4,7 @@
   "description": "Chatbase integration for Botmatic.ai",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@botmatic/js-integration": "^0.4.2",

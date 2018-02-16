@@ -5,6 +5,5 @@ require('dotenv').config({
 })
 
 require('./src/chatbase-integration')({
-  port: 9865,
-  endpoint:"/test"
+  port: 9865
 })
