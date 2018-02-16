@@ -46,7 +46,6 @@ const start = (botmatic, botmaticDatastore) => {
         console.error('ERROR:', "API key is required.");
         resolve({
           success: false,
-          error: "API key is required.",
           errorFields: {
             api_key: "Field required"
           }
@@ -99,7 +98,7 @@ const start = (botmatic, botmaticDatastore) => {
 const init = (params = {}) => {
   const botmaticDatastore = require('./datastore')
 
-  const botmatic = require('../../botmatic-js-integration/src/index')({
+  const botmatic = require('@botmatic/js-integration')({
     'port': params.port || 9876,
     'endpoint': params.endpoint || "/",
     auth: async (token) => {
