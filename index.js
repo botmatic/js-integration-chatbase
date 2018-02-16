@@ -4,7 +4,8 @@ require('dotenv').config({
   path: __dirname+'/.env'
 })
 
+console.log('LOL')
 require('./src/chatbase-integration')({
-  port: 9865,
-  endpoint:"/test"
+  port: process.env.BOTMATIC_PORT,
+  endpoint: process.env.BOTMATIC_ENDPOINT
 })
