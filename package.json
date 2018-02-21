@@ -4,6 +4,7 @@
   "description": "Chatbase integration for Botmatic.ai",
   "main": "server.js",
   "scripts": {
+    "deploy": "now-pipeline --alias js-integration-chatbase.now.sh",
     "start": "node index.js"
   },
   "dependencies": {
