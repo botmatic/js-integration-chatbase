@@ -24,6 +24,19 @@ botmaticChatbase.userMessage = (chatbaseKey, userId, platform, message = "", int
   return msg
 }
 
+botmaticChatbase.botMessage = (chatbaseKey, userId, platform, message = "") => {
+  var msg = chatbase.newMessage(chatbaseKey, userId.toString())
+    .setAs
+    .setAsTypeAgent() // sets the message as type user
+    .setTimestamp(Date.now().toString()) // Only unix epochs with Millisecond precision
+    .setPlatform(platform)
+    .setMessage(message) // the message sent by either user or agent
+    // .setAsFeedback()
+
+  return msg
+}
+
+
 botmaticChatbase.sendToChatbase = (msg, resolve, reject) => {
   // console.log("sending to chatbase")
 
@@ -38,5 +51,6 @@ botmaticChatbase.sendToChatbase = (msg, resolve, reject) => {
       reject({success: false, data: err, type: 'data'})
     });
 }
+)
 
 module.exports = botmaticChatbase

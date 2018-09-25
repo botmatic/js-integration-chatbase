@@ -80,16 +80,7 @@ const start = (botmatic, botmaticDatastore) => {
     return new Promise(async (resolve, reject) => {
       match(data.data, [
        [{result: {intents: $, source: $}, platform: $, contact_id: $, bot_id: $}, (intents, source, platform, userId, botId) => {
-         
-        // console.log('INTENT FOUND !!!!!!!')
-        // console.log("auth.client.api_key", auth.client.api_key)
-        // console.log("userId", userId)
-        // console.log("platform", platform)
-        // console.log('source', source)
-        // console.log('intents[0].slug', intents[0].slug)
-
          var msg = botmaticChatbase.userMessage(auth.client.api_key, userId, platform, source, intents[0].slug)
-        //  var msg = botmaticChatbase.userMessage(auth.client.api_key, userId, platform, source, "", true)
          botmaticChatbase.sendToChatbase(msg, resolve, reject)
        }],
 
@@ -124,7 +115,7 @@ const start = (botmatic, botmaticDatastore) => {
     } catch (e) {}
 
     return new Promise(async (resolve, reject) => {
-      var msg = botmaticChatbase.userMessage(auth.client.api_key, data.data.contact_id, data.data.platform, message, "", true)
+      var msg = botmaticChatbase.botMessage(auth.client.api_key, data.data.contact_id, data.data.platform, message)
       botmaticChatbase.sendToChatbase(msg, resolve, reject)
     })
   })
