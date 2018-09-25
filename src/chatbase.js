@@ -25,12 +25,12 @@ botmaticChatbase.userMessage = (chatbaseKey, userId, platform, message = "", int
 }
 
 botmaticChatbase.sendToChatbase = (msg, resolve, reject) => {
-  debug("sending to chatbase")
+  // console.log("sending to chatbase")
 
   msg
     .send()
     .then(msg => {
-      debug('Message sent with success to chatbase', msg)
+      // console.log('Message sent with success to chatbase', msg)
       resolve({success: true, data: msg.getCreateResponse(), type: 'data'})
     })
     .catch(err => {

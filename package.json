@@ -4,11 +4,11 @@
   "description": "Chatbase integration for Botmatic.ai",
   "main": "server.js",
   "scripts": {
-    "deploy": "now-pipeline --alias js-integration-chatbase.now.sh",
-    "start": "node index.js"
+    "start": "node index.js",
+    "deploy": "now -f && now alias && now rm @botmatic/chatbase --safe --yes"
   },
   "dependencies": {
-    "@botmatic/js-integration": "^0.4.2",
+    "@botmatic/js-integration": "^0.4.4",
     "@google-cloud/datastore": "^1.3.4",
     "@google/chatbase": "^1.0.0",
     "debug": "^3.1.0",
@@ -26,7 +26,13 @@
   },
   "now": {
     "alias": "integration-chatbase.now.sh",
-    "dotenv": true
+    "dotenv": true,
+    "scale": {
+      "bru1": {
+        "min": 1,
+        "max": 1
+      }
+    }
   },
   "license": "MIT",
   "keywords": [

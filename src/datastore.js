@@ -64,7 +64,7 @@ botmaticDatastore.saveChatbase = (chatbase, token, api_key) => {
     datastore
       .save(chatbaseToSave)
       .then(() => {
-        debug(`Saved ${JSON.stringify(chatbaseToSave.key)}: ${JSON.stringify(chatbaseToSave.data)}`);
+        // console.log(`Saved ${JSON.stringify(chatbaseToSave.key)}: ${JSON.stringify(chatbaseToSave.data)}`);
         resolve({success: true})
       })
       .catch(err => {
