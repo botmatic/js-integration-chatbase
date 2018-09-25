@@ -51,6 +51,6 @@ botmaticChatbase.sendToChatbase = (msg, resolve, reject) => {
       reject({success: false, data: err, type: 'data'})
     });
 }
-)
+
 
 module.exports = botmaticChatbase
